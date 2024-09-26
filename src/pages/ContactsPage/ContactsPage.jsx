@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import ContactForm from "../../components/ContactForm/ContactForm";
 import SearchBox from "../../components/SearchBox/SearchBox";
 import ContactList from "../..//components/ContactList/ContactList";
-import { fetchContacts } from "../../redux/contactsOps";
-import { selectIsLoading, selectIsError } from "../../redux/contactsSlice";
+import { fetchContacts } from "../../redux/contacts/operations";
+import { selectIsLoading, selectIsError } from "../../redux/contacts/selectors";
 import { RotatingLines } from "react-loader-spinner";
 
 export default function ContactsPage() {
@@ -20,7 +20,7 @@ export default function ContactsPage() {
 
   useEffect(() => {
     if (error) {
-      toast.error("Error fetching contacts!");
+      toast.error(error);
     }
   }, [error]);
 
