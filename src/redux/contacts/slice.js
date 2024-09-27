@@ -24,7 +24,7 @@ const contactsSlice = createSlice({
     //   );
     // },
     resetCurrentContact: (state) => {
-      state.currentContact = null; // Reset current contact
+      state.currentContact = null;
     },
   },
   extraReducers: (builder) => {
@@ -69,13 +69,11 @@ const contactsSlice = createSlice({
       // })
       .addCase(changeContact.fulfilled, (state, action) => {
         state.currentContact = action.payload;
-        const updatedContact = action.payload; // Получаем обновленные данные из payload
+        const updatedContact = action.payload;
 
-        state.items = state.items.map(
-          (contact) =>
-            contact.id === updatedContact.id ? updatedContact : contact // Если id совпадает, возвращаем обновленный контакт, иначе - оригинальный
+        state.items = state.items.map((contact) =>
+          contact.id === updatedContact.id ? updatedContact : contact
         );
-        // Сбрасываем текущий контакт после обновления
       })
 
       .addCase(logOut.fulfilled, () => {

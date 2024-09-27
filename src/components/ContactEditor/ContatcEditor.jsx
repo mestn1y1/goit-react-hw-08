@@ -36,6 +36,7 @@ export default function ContactEditor({ contact }) {
 
     dispatch(changeContact({ contactId: contact.id, updatedContact }));
     dispatch(resetCurrentContact());
+    console.log("currentContact after dispatch:", currentContact);
     actions.resetForm();
     toast.success(`Contact ${values.username} successfully updated!`);
   };
