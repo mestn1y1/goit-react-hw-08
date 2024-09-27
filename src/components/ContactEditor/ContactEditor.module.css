@@ -1,0 +1,32 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 8px;
+}
+
+.label {
+  align-self: flex-start;
+}
+
+.btn {
+  width: fit-content;
+  display: block;
+  margin: 0 auto;
+  padding: 8px;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+.btn:hover {
+  border: 1px solid #242424;
+}
+
+.errorMessage {
+  color: orangered;
+  align-self: flex-start;
+  font-size: 12px;
+}

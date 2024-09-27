@@ -1,9 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchContacts, addContact, deleteContact } from "./operations";
+import {
+  fetchContacts,
+  addContact,
+  deleteContact,
+  changeContact,
+} from "./operations";
 import { logOut } from "../auth/operations";
 
 const initialState = {
   items: [],
+  currentContact: null,
   loading: false,
   error: null,
 };
@@ -11,6 +17,16 @@ const initialState = {
 const contactsSlice = createSlice({
   name: "contacts",
   initialState,
+  reducers: {
+    // updateContact: (state, action) => {
+    //   state.items = state.items.map((item) =>
+    //     item.id === action.payload.id ? { ...item, ...action.payload } : item
+    //   );
+    // },
+    resetCurrentContact: (state) => {
+      state.currentContact = null; // Reset current contact
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchContacts.pending, (state) => {
@@ -48,6 +64,20 @@ const contactsSlice = createSlice({
         state.loading = false;
         state.error = true;
       })
+      // .addCase(changeContact.fulfilled, (state, action) => {
+      //   state.currentContact = action.payload;
+      // })
+      .addCase(changeContact.fulfilled, (state, action) => {
+        state.currentContact = action.payload;
+        const updatedContact = action.payload; // Получаем обновленные данные из payload
+
+        state.items = state.items.map(
+          (contact) =>
+            contact.id === updatedContact.id ? updatedContact : contact // Если id совпадает, возвращаем обновленный контакт, иначе - оригинальный
+        );
+        // Сбрасываем текущий контакт после обновления
+      })
+
       .addCase(logOut.fulfilled, () => {
         return initialState;
       });
@@ -55,6 +85,7 @@ const contactsSlice = createSlice({
 });
 
 export default contactsSlice.reducer;
+export const { resetCurrentContact } = contactsSlice.actions;
 
 // export const selectIsLoading = (state) => state.contacts.loading;
 
