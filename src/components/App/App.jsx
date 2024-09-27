@@ -1,7 +1,12 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Layout from "../Layout/Layout";
-import { lazy, Suspense } from "react";
+import RestrictedRoute from "../RestrictedRoute/RestrictedRoute";
+import { lazy, Suspense, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { refreshUser } from "../../redux/auth/operations";
+import { selectIsRefreshing } from "../../redux/auth/selectors";
+import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
 const HomePage = lazy(() => import("../../pages/HomePage/HomePage"));
 const LoginPage = lazy(() => import("../../pages/LoginPage/LoginPage"));
@@ -13,42 +18,46 @@ const ContactsPage = lazy(() =>
 );
 
 export default function App() {
-  return (
-    <div>
-      <Layout>
-        <Suspense fallback={null}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/register" element={<RegistrationPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/contacts" element={<ContactsPage />} />
-          </Routes>
-        </Suspense>
-      </Layout>
-    </div>
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(refreshUser());
+  }, [dispatch]);
+
+  const isRefreshing = useSelector(selectIsRefreshing);
+
+  return isRefreshing ? (
+    <b>please wait update info...</b>
+  ) : (
+    <Layout>
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/register"
+            element={
+              <RestrictedRoute
+                component={<RegistrationPage />}
+                redirectTo="/"
+              />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <RestrictedRoute
+                component={<LoginPage />}
+                redirectTo="/contacts"
+              />
+            }
+          />
+          <Route
+            path="/contacts"
+            element={
+              <PrivateRoute component={<ContactsPage />} redirectTo="/login" />
+            }
+          />
+        </Routes>
+      </Suspense>
+    </Layout>
   );
 }
-
-// import { lazy, Suspense } from "react";
-// import { Route, Routes } from "react-router-dom";
-// import Layout from "./Layout/Layout";
-
-// const HomePage = lazy(() => import("../pages/HomePage/HomePage"));
-// const RegisterPage = lazy(() => import("../pages/RegisterPage/RegisterPage"));
-// const LoginPage = lazy(() => import("../pages/LoginPage/LoginPage"));
-// const TasksPage = lazy(() => import("../pages/TasksPage/TasksPage"));
-
-// export default function App() {
-//   return (
-//     <Layout>
-//       <Suspense fallback={null}>
-//         <Routes>
-//           <Route path="/" element={<HomePage />} />
-//           <Route path="/register" element={<RegisterPage />} />
-//           <Route path="/login" element={<LoginPage />} />
-//           <Route path="/tasks" element={<TasksPage />} />
-//         </Routes>
-//       </Suspense>
-//     </Layout>
-//   );
-// }
