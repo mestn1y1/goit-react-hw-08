@@ -34,11 +34,18 @@ export default function ContactEditor({ contact }) {
       number: values.usernumber,
     };
 
-    dispatch(changeContact({ contactId: contact.id, updatedContact }));
-    dispatch(resetCurrentContact());
-    console.log("currentContact after dispatch:", currentContact);
-    actions.resetForm();
-    toast.success(`Contact ${values.username} successfully updated!`);
+    dispatch(changeContact({ contactId: contact.id, updatedContact }))
+      .then(() => {
+        dispatch({ type: "contacts/updateContactList" });
+        toast.success(`Contact ${values.username} successfully updated!`);
+      })
+      .catch(() => {
+        toast.error("Failed to update contact");
+      })
+      .finally(() => {
+        actions.resetForm();
+        dispatch(resetCurrentContact());
+      });
   };
 
   return (

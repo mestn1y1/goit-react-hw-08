@@ -69,13 +69,17 @@ const contactsSlice = createSlice({
       // })
       .addCase(changeContact.fulfilled, (state, action) => {
         state.currentContact = action.payload;
-        const updatedContact = action.payload;
-
-        state.items = state.items.map((contact) =>
-          contact.id === updatedContact.id ? updatedContact : contact
-        );
       })
-
+      .addCase("contacts/updateContactList", (state) => {
+        if (state.currentContact) {
+          state.items = state.items.map((contact) =>
+            contact.id === state.currentContact.id
+              ? state.currentContact
+              : contact
+          );
+          state.currentContact = null; // Сбрасываем текущий контакт
+        }
+      })
       .addCase(logOut.fulfilled, () => {
         return initialState;
       });
@@ -84,18 +88,3 @@ const contactsSlice = createSlice({
 
 export default contactsSlice.reducer;
 export const { resetCurrentContact } = contactsSlice.actions;
-
-// export const selectIsLoading = (state) => state.contacts.loading;
-
-// export const selectIsError = (state) => state.contacts.error;
-
-// export const selectContacts = (state) => state.contacts.items;
-
-// export const selectVisibleContacts = createSelector(
-//   [selectContacts, selectFilter],
-//   (contacts, filter) => {
-//     return contacts.filter((contact) =>
-//       contact.name.toLowerCase().includes(filter.toLowerCase())
-//     );
-//   }
-// );
