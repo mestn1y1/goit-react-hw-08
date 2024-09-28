@@ -5,6 +5,7 @@ import { FiPhone } from "react-icons/fi";
 import { BsPencilSquare } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { deleteContact, changeContact } from "../../redux/contacts/operations";
+import { setCurrentContact } from "../../redux/contacts/slice";
 
 export default function Contact({ contact }) {
   const dispatch = useDispatch();
@@ -13,11 +14,7 @@ export default function Contact({ contact }) {
   };
 
   const handleChange = () => {
-    const updatedContact = {
-      name: contact.name, // Имя контакта
-      number: contact.number, // Номер контакта
-    };
-    dispatch(changeContact({ contactId: contact.id, updatedContact }));
+    dispatch(setCurrentContact(contact));
   };
 
   return (
@@ -32,12 +29,14 @@ export default function Contact({ contact }) {
           <span className={css.itemEl}>{contact.number}</span>
         </div>
       </div>
-      <button className={css.button} onClick={handleDelete}>
-        <MdDelete />
-      </button>
-      <button className={css.button} onClick={handleChange}>
-        <BsPencilSquare />
-      </button>
+      <div className={css.containerButton}>
+        <button className={css.button} onClick={handleChange}>
+          <BsPencilSquare />
+        </button>
+        <button className={css.button} onClick={handleDelete}>
+          <MdDelete />
+        </button>
+      </div>
     </li>
   );
 }

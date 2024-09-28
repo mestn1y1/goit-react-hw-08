@@ -10,6 +10,7 @@ import { selectIsLoading, selectIsError } from "../../redux/contacts/selectors";
 import { RotatingLines } from "react-loader-spinner";
 import { selectCurrentContact } from "../../redux/contacts/selectors";
 import ContactEditor from "../../components/ContactEditor/ContatcEditor";
+import css from "./ContactsPage.module.css";
 
 export default function ContactsPage() {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ export default function ContactsPage() {
   }, [error]);
 
   return (
-    <div>
+    <div className={css.container}>
       <h1>Phonebook</h1>
       {currentContact ? (
         <ContactEditor contact={currentContact} />

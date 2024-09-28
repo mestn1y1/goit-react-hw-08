@@ -19,14 +19,16 @@
   padding: 8px;
   margin-top: 20px;
   font-size: 16px;
-}
-
-.btn:hover {
-  border: 1px solid #242424;
+  background-color: transparent;
 }
 
 .errorMessage {
   color: orangered;
   align-self: flex-start;
   font-size: 12px;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: space-evenly;
 }

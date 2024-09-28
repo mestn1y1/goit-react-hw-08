@@ -1,11 +1,15 @@
 import { useSelector, useDispatch } from "react-redux";
 import { selectCurrentContact } from "../../redux/contacts/selectors";
 import { changeContact } from "../../redux/contacts/operations";
+import { resetCurrentContact } from "../../redux/contacts/slice";
+import { FaBackspace } from "react-icons/fa";
+
+import { RxUpdate } from "react-icons/rx";
+
 import { toast } from "react-toastify";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import css from "./ContactEditor.module.css";
-import { resetCurrentContact } from "../../redux/contacts/slice";
 
 export default function ContactEditor({ contact }) {
   const dispatch = useDispatch();
@@ -34,18 +38,13 @@ export default function ContactEditor({ contact }) {
       number: values.usernumber,
     };
 
-    dispatch(changeContact({ contactId: contact.id, updatedContact }))
-      .then(() => {
-        dispatch({ type: "contacts/updateContactList" });
-        toast.success(`Contact ${values.username} successfully updated!`);
-      })
-      .catch(() => {
-        toast.error("Failed to update contact");
-      })
-      .finally(() => {
-        actions.resetForm();
-        dispatch(resetCurrentContact());
-      });
+    dispatch(changeContact({ contactId: contact.id, updatedContact }));
+    toast.success("Contact updated successfully!");
+    actions.resetForm();
+  };
+
+  const handleCancel = () => {
+    dispatch(resetCurrentContact());
   };
 
   return (
@@ -84,10 +83,15 @@ export default function ContactEditor({ contact }) {
           component="span"
           className={css.errorMessage}
         />
+        <div className={css.btnContainer}>
+          <button className={css.btn} type="submit">
+            <RxUpdate />
+          </button>
 
-        <button className={css.btn} type="submit">
-          Update contact
-        </button>
+          <button className={css.btn} type="button" onClick={handleCancel}>
+            <FaBackspace />
+          </button>
+        </div>
       </Form>
     </Formik>
   );

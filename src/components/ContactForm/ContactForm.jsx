@@ -1,12 +1,3 @@
-//   const handleSubmit = (values, actions) => {
-//     const newContact = {
-//       name: values.username,
-//       number: values.usernumber,
-//     };
-//     dispatch(addContact(newContact));
-//     actions.resetForm();
-//   };
-
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
 import { addContact } from "../../redux/contacts/operations";
